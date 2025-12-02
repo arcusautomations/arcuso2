@@ -47,13 +47,16 @@ export async function POST(request: Request) {
           // Next.js cookies() API automatically includes these in response headers
           cookiesToSet.forEach(({ name, value, options }) => {
             try {
+              // Preserve Supabase's cookie options but ensure secure is set for production
+              const isProduction = process.env.NODE_ENV === "production" || process.env.VERCEL;
               cookieStore.set(name, value, {
-                ...options,
+                ...options, // Preserve Supabase's original options first
                 httpOnly: options?.httpOnly ?? true,
                 sameSite: (options?.sameSite as "lax" | "strict" | "none") ?? "lax",
-                secure: options?.secure ?? (process.env.NODE_ENV === "production"),
+                secure: isProduction ? true : (options?.secure ?? false),
                 path: options?.path ?? "/",
-                maxAge: options?.maxAge ?? 60 * 60 * 24 * 7, // 7 days default
+                // Don't override maxAge if Supabase provides it
+                ...(options?.maxAge ? { maxAge: options.maxAge } : {}),
               });
             } catch (error) {
               // Cookies are set via Next.js response - this is expected in some contexts

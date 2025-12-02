@@ -48,8 +48,8 @@ export default function HomePage() {
       // Handle successful password reset token
       const accessToken = params.get("access_token");
       if (accessToken && type === "recovery") {
-        // Redirect to reset-password page with token in hash
-        router.replace(`/auth/reset-password${hash}`);
+        // Use window.location.href for full redirect that preserves hash
+        window.location.href = `/auth/reset-password${hash}`;
         return;
       }
     }
