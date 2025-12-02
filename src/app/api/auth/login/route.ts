@@ -4,6 +4,9 @@ import { createServerClient as createSupabaseServerClient } from "@supabase/ssr"
 import { loginSchema } from "@/lib/validation/auth";
 import type { Database } from "@/types/database";
 
+// Force dynamic rendering - this route uses cookies for authentication
+export const dynamic = 'force-dynamic';
+
 /**
  * Server-side login route handler
  * This ensures cookies are set properly using Next.js cookies() API

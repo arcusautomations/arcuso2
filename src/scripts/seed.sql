@@ -210,3 +210,4 @@ ON CONFLICT DO NOTHING;
 SELECT type, COUNT(*) as count FROM resources GROUP BY type ORDER BY type;
 
 
+

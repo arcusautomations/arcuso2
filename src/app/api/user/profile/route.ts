@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerClient, createAdminClient } from "@/lib/supabase/server";
 import { profileUpdateSchema } from "@/lib/validation/profile";
 
+// Force dynamic rendering - this route uses cookies for authentication
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/user/profile
  * Get the current user's profile
@@ -108,5 +111,6 @@ export async function PATCH(request: NextRequest) {
     );
   }
 }
+
 
 

@@ -78,3 +78,4 @@
 4. **Try Incognito Mode**: Rules out browser extension issues
 5. **Check Supabase Logs**: Dashboard → Logs → Auth
 
+

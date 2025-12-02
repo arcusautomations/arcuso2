@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase/server";
 import { createProjectSchema, projectFilterSchema } from "@/lib/validation/project";
 
+// Force dynamic rendering - this route uses cookies for authentication
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/projects
  * Get the current user's projects
@@ -142,5 +145,6 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
 
 
