@@ -70,8 +70,11 @@ function LoginForm() {
         description: "You have been signed in successfully.",
       });
 
-      router.push(redirect);
-      router.refresh();
+      // Use window.location for a full page reload to ensure cookies are read
+      // This ensures the middleware can properly detect the authenticated session
+      setTimeout(() => {
+        window.location.href = redirect;
+      }, 100);
     } catch (err) {
       setError("An unexpected error occurred. Please try again.");
       setIsLoading(false);

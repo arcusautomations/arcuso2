@@ -35,7 +35,7 @@ export async function signIn(
 
     const supabase = await createServerClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: validated.data.email,
       password: validated.data.password,
     });
@@ -48,12 +48,22 @@ export async function signIn(
       };
     }
 
-    revalidatePath("/", "layout");
+    // Ensure session is properly set in cookies
+    if (data.session) {
+      // The SSR client automatically handles cookie setting
+      revalidatePath("/", "layout");
+      
+      return {
+        data: { redirectTo: "/dashboard" },
+        error: null,
+        success: true,
+      };
+    }
 
     return {
-      data: { redirectTo: "/dashboard" },
-      error: null,
-      success: true,
+      data: null,
+      error: "Failed to create session",
+      success: false,
     };
   } catch (error) {
     console.error("Sign in error:", error);

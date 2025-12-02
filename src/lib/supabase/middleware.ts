@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createServerClient as createSupabaseServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@/types/database";
 
@@ -21,13 +21,23 @@ export async function createMiddlewareClient(request: NextRequest) {
     },
   });
 
-  const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      persistSession: false,
-    },
-    global: {
-      headers: {
-        cookie: request.headers.get("cookie") ?? "",
+  const supabase = createSupabaseServerClient<Database>(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value, options }) => {
+          request.cookies.set(name, value);
+        });
+        response = NextResponse.next({
+          request: {
+            headers: request.headers,
+          },
+        });
+        cookiesToSet.forEach(({ name, value, options }) => {
+          response.cookies.set(name, value, options);
+        });
       },
     },
   });
