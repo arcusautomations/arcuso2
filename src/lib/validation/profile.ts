@@ -10,6 +10,30 @@ export const profileUpdateSchema = z.object({
     .max(100, "Name must be less than 100 characters")
     .optional()
     .nullable(),
+  firstName: z
+    .string()
+    .min(1, "First name is required")
+    .max(50, "First name must be less than 50 characters")
+    .optional()
+    .nullable(),
+  lastName: z
+    .string()
+    .min(1, "Last name is required")
+    .max(50, "Last name must be less than 50 characters")
+    .optional()
+    .nullable(),
+  mobileNumber: z
+    .string()
+    .regex(/^\+?[1-9]\d{1,14}$/, "Please enter a valid mobile number")
+    .optional()
+    .nullable()
+    .or(z.literal("")),
+  dateOfBirth: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Please enter a valid date (YYYY-MM-DD)")
+    .optional()
+    .nullable()
+    .or(z.literal("")),
   company: z
     .string()
     .max(100, "Company name must be less than 100 characters")

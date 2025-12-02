@@ -352,6 +352,10 @@ export async function getCurrentUser() {
     profile: profile
       ? {
           fullName: profile.full_name,
+          firstName: profile.first_name,
+          lastName: profile.last_name,
+          mobileNumber: profile.mobile_number,
+          dateOfBirth: profile.date_of_birth,
           avatarUrl: profile.avatar_url,
           company: profile.company,
           role: profile.role,

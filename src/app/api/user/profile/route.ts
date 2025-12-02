@@ -79,17 +79,25 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    const { fullName, company, role, avatarUrl } = validation.data;
+    const { fullName, firstName, lastName, mobileNumber, dateOfBirth, company, role, avatarUrl } = validation.data;
+
+    // Build update object with only provided fields
+    const updateData: Record<string, any> = {
+      updated_at: new Date().toISOString(),
+    };
+
+    if (fullName !== undefined) updateData.full_name = fullName;
+    if (firstName !== undefined) updateData.first_name = firstName || null;
+    if (lastName !== undefined) updateData.last_name = lastName || null;
+    if (mobileNumber !== undefined) updateData.mobile_number = mobileNumber || null;
+    if (dateOfBirth !== undefined) updateData.date_of_birth = dateOfBirth || null;
+    if (company !== undefined) updateData.company = company;
+    if (role !== undefined) updateData.role = role;
+    if (avatarUrl !== undefined) updateData.avatar_url = avatarUrl;
 
     const { data: profile, error } = await supabase
       .from("profiles")
-      .update({
-        full_name: fullName,
-        company,
-        role,
-        avatar_url: avatarUrl,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updateData)
       .eq("id", user.id)
       .select()
       .single();

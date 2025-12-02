@@ -38,6 +38,10 @@ export interface UserSession {
   emailVerified: boolean;
   profile: {
     fullName: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    mobileNumber: string | null;
+    dateOfBirth: string | null;
     avatarUrl: string | null;
     company: string | null;
     role: string | null;
