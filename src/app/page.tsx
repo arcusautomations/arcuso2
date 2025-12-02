@@ -1,8 +1,60 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, Sparkles, Shield, Zap, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
+  const router = useRouter();
+
+  // Handle Supabase redirect errors in URL hash
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1));
+      const error = params.get("error");
+      const type = params.get("type");
+      const errorDescription = params.get("error_description");
+
+      if (error) {
+        // Handle password reset errors
+        if (type === "recovery" || errorDescription?.includes("recovery") || errorDescription?.includes("reset")) {
+          let errorMessage = "Password reset link is invalid or has expired.";
+          if (error === "access_denied" && errorDescription?.includes("expired")) {
+            errorMessage = "Password reset link has expired. Please request a new one.";
+          } else if (errorDescription) {
+            errorMessage = decodeURIComponent(errorDescription.replace(/\+/g, " "));
+          }
+          
+          // Redirect to reset-password page with error, or login if expired
+          if (error === "access_denied" && errorDescription?.includes("expired")) {
+            router.replace(`/login?error=${encodeURIComponent(errorMessage)}`);
+          } else {
+            router.replace(`/auth/reset-password?error=${encodeURIComponent(errorMessage)}`);
+          }
+          return;
+        }
+
+        // Handle other auth errors - redirect to login
+        let errorMessage = "Authentication failed";
+        if (errorDescription) {
+          errorMessage = decodeURIComponent(errorDescription.replace(/\+/g, " "));
+        }
+        router.replace(`/login?error=${encodeURIComponent(errorMessage)}`);
+      }
+
+      // Handle successful password reset token
+      const accessToken = params.get("access_token");
+      if (accessToken && type === "recovery") {
+        // Redirect to reset-password page with token in hash
+        router.replace(`/auth/reset-password${hash}`);
+        return;
+      }
+    }
+  }, [router]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950">
       {/* Navigation */}

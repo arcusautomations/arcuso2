@@ -35,24 +35,45 @@ function ResetPasswordForm() {
   useEffect(() => {
     const handleTokenVerification = async () => {
       try {
-        // Check for token in URL hash (Supabase redirects with #access_token=...)
+        // Check for errors in URL hash first
         const hash = window.location.hash;
         if (hash) {
           const params = new URLSearchParams(hash.substring(1)); // Remove #
-          const accessToken = params.get("access_token");
+          const error = params.get("error");
+          const errorDescription = params.get("error_description");
           const type = params.get("type");
+          
+          // Handle errors in hash
+          if (error) {
+            let errorMessage = "Password reset link is invalid or has expired.";
+            if (error === "access_denied" && errorDescription?.includes("expired")) {
+              errorMessage = "Password reset link has expired. Please request a new one.";
+            } else if (errorDescription) {
+              errorMessage = decodeURIComponent(errorDescription.replace(/\+/g, " "));
+            }
+            setError(errorMessage);
+            setIsVerifyingToken(false);
+            // Clear the hash from URL
+            window.history.replaceState(null, "", window.location.pathname);
+            return;
+          }
+
+          // Check for token in URL hash
+          const accessToken = params.get("access_token");
           
           if (accessToken && type === "recovery") {
             // Exchange the token for a session
             const supabase = getSupabaseBrowserClient();
-            const { data, error } = await supabase.auth.setSession({
+            const { data, error: sessionError } = await supabase.auth.setSession({
               access_token: accessToken,
               refresh_token: params.get("refresh_token") || "",
             });
 
-            if (error) {
-              setError(`Token verification failed: ${error.message}`);
+            if (sessionError) {
+              setError(`Token verification failed: ${sessionError.message}. Please request a new password reset.`);
               setIsVerifyingToken(false);
+              // Clear the hash from URL
+              window.history.replaceState(null, "", window.location.pathname);
               return;
             }
 
@@ -64,6 +85,14 @@ function ResetPasswordForm() {
               return;
             }
           }
+        }
+
+        // Check for error in query params
+        const urlError = searchParams.get("error");
+        if (urlError) {
+          setError(decodeURIComponent(urlError));
+          setIsVerifyingToken(false);
+          return;
         }
 
         // Check for token in query params (alternative format)
