@@ -209,3 +209,4 @@ ON CONFLICT DO NOTHING;
 -- Verify the seed data
 SELECT type, COUNT(*) as count FROM resources GROUP BY type ORDER BY type;
 
+

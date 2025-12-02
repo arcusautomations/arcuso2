@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
   // Skip middleware for static files and API routes that don't need auth
   if (
     pathname.startsWith("/_next") ||
-    pathname.startsWith("/api/health") ||
+    pathname.startsWith("/api/") ||
     pathname.includes(".") // static files
   ) {
     return NextResponse.next();
@@ -23,11 +23,17 @@ export async function middleware(request: NextRequest) {
 
     // Redirect authenticated users away from auth pages
     if (isAuthRoute(pathname) && session) {
-      // Check if there's a redirect param and use it, otherwise go to dashboard
+      // Prevent redirect loops - if we're already on the destination, don't redirect
       const redirectParam = request.nextUrl.searchParams.get("redirect");
       const destination = redirectParam && redirectParam.startsWith("/") 
         ? redirectParam 
         : "/dashboard";
+      
+      // If already on destination, don't redirect
+      if (pathname === destination || pathname === "/dashboard") {
+        return response;
+      }
+      
       const dashboardUrl = new URL(destination, request.url);
       // Clear the redirect param from URL
       dashboardUrl.searchParams.delete("redirect");
@@ -36,6 +42,11 @@ export async function middleware(request: NextRequest) {
 
     // Redirect unauthenticated users away from protected pages
     if (isProtectedRoute(pathname) && !session) {
+      // Prevent redirect loops - don't redirect if already on login
+      if (pathname === "/login") {
+        return response;
+      }
+      
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);

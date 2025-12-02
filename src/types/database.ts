@@ -282,3 +282,4 @@ export type ResourceType = Database["public"]["Enums"]["resource_type"];
 export type DifficultyLevel = Database["public"]["Enums"]["difficulty_level"];
 export type PurchaseStatus = Database["public"]["Enums"]["purchase_status"];
 
+

@@ -164,3 +164,4 @@ CREATE POLICY "Users can view own purchases"
 --   FOR SELECT
 --   USING (bucket_id = 'avatars');
 
+

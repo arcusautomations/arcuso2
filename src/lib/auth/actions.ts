@@ -17,6 +17,23 @@ import {
 import type { ApiResponse } from "@/types";
 
 /**
+ * Get the correct app URL for redirects
+ * Uses production URL from env or constructs from Vercel URL
+ */
+function getAppUrl(): string {
+  if (process.env.NEXT_PUBLIC_APP_URL) {
+    return process.env.NEXT_PUBLIC_APP_URL;
+  }
+  
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  
+  // Fallback to production URL
+  return "https://arcusonline-cursor.vercel.app";
+}
+
+/**
  * Sign in with email and password
  * This version returns a response for client-side handling
  */
@@ -141,7 +158,7 @@ export async function signUp(
         data: {
           full_name: validated.data.fullName ?? null,
         },
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/auth/callback`,
+        emailRedirectTo: `${getAppUrl()}/auth/callback?next=/dashboard`,
       },
     });
 
@@ -210,7 +227,7 @@ export async function forgotPassword(
     const { error } = await supabase.auth.resetPasswordForEmail(
       validated.data.email,
       {
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/auth/reset-password`,
+        redirectTo: `${getAppUrl()}/auth/reset-password`,
       }
     );
 

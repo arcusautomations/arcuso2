@@ -9,9 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { signIn } from "@/lib/auth";
 import { loginSchema, type LoginFormData } from "@/lib/validation/auth";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -59,32 +57,29 @@ function LoginForm() {
     }
 
     try {
-      // Use client-side Supabase client for immediate cookie setting
-      // This ensures cookies are set in the browser before redirect
-      const supabase = getSupabaseBrowserClient();
-      
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
+      // Use server-side route handler to ensure cookies are set properly
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          redirectTo: redirect,
+        }),
       });
 
-      if (signInError) {
-        setError(signInError.message);
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.error ?? "Failed to sign in");
         setIsLoading(false);
         return;
       }
 
-      if (!data.session) {
-        setError("Failed to create session. Please try again.");
-        setIsLoading(false);
-        return;
-      }
-
-      // Verify session is set before redirecting
-      const { data: { session: verifySession } } = await supabase.auth.getSession();
-      
-      if (!verifySession) {
-        setError("Session not created. Please try again.");
+      if (!result.success) {
+        setError("Failed to sign in. Please try again.");
         setIsLoading(false);
         return;
       }
@@ -93,12 +88,12 @@ function LoginForm() {
         description: "You have been signed in successfully.",
       });
 
-      // Small delay to ensure toast is visible and cookies are fully persisted
+      // Small delay to ensure toast is visible and cookies are persisted
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Use window.location.href for a hard redirect with full page reload
-      // This ensures cookies are read by middleware on the next request
-      window.location.href = redirect;
+      // Use window.location.replace for a hard redirect
+      // This ensures a full page reload so middleware can read the cookies
+      window.location.replace(result.redirectTo || redirect);
     } catch (err) {
       console.error("Login error:", err);
       setError("An unexpected error occurred. Please try again.");

@@ -9,14 +9,30 @@ import { revalidatePath } from "next/cache";
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
+  const error = requestUrl.searchParams.get("error");
+  const errorDescription = requestUrl.searchParams.get("error_description");
   const next = requestUrl.searchParams.get("next") ?? "/dashboard";
+
+  // Handle OAuth/email verification errors
+  if (error) {
+    let errorMessage = "Authentication failed";
+    if (error === "access_denied" && errorDescription?.includes("expired")) {
+      errorMessage = "Email link has expired. Please request a new verification email.";
+    } else if (errorDescription) {
+      errorMessage = decodeURIComponent(errorDescription.replace(/\+/g, " "));
+    }
+    
+    return NextResponse.redirect(
+      new URL(`/login?error=${encodeURIComponent(errorMessage)}`, requestUrl.origin)
+    );
+  }
 
   if (code) {
     const supabase = await createServerClient();
     
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
     
-    if (!error && data.session) {
+    if (!exchangeError && data.session) {
       // Ensure session is persisted
       await supabase.auth.getSession();
       revalidatePath("/", "layout");
@@ -25,11 +41,18 @@ export async function GET(request: Request) {
       const redirectUrl = new URL(next, requestUrl.origin);
       return NextResponse.redirect(redirectUrl);
     }
+    
+    // If exchange failed, redirect with error
+    if (exchangeError) {
+      return NextResponse.redirect(
+        new URL(`/login?error=${encodeURIComponent(exchangeError.message)}`, requestUrl.origin)
+      );
+    }
   }
 
-  // If there's an error or no code, redirect to login with error
+  // If there's no code and no error, redirect to login
   return NextResponse.redirect(
-    new URL("/login?error=auth-callback-error", requestUrl.origin)
+    new URL("/login?error=Invalid authentication request", requestUrl.origin)
   );
 }
 
