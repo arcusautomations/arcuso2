@@ -19,18 +19,31 @@ import type { ApiResponse } from "@/types";
 /**
  * Get the correct app URL for redirects
  * Uses production URL from env or constructs from Vercel URL
+ * CRITICAL: Always returns production URL in production environment
  */
 function getAppUrl(): string {
+  // In production, always use production URL
+  if (process.env.NODE_ENV === "production") {
+    // Check for explicit production URL first
+    if (process.env.NEXT_PUBLIC_APP_URL && !process.env.NEXT_PUBLIC_APP_URL.includes("localhost")) {
+      return process.env.NEXT_PUBLIC_APP_URL;
+    }
+    
+    // Use Vercel URL if available (auto-set by Vercel)
+    if (process.env.VERCEL_URL) {
+      return `https://${process.env.VERCEL_URL}`;
+    }
+    
+    // Fallback to production URL - NEVER use localhost in production
+    return "https://arcusonline-cursor.vercel.app";
+  }
+  
+  // Development: use localhost or env variable
   if (process.env.NEXT_PUBLIC_APP_URL) {
     return process.env.NEXT_PUBLIC_APP_URL;
   }
   
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-  
-  // Fallback to production URL
-  return "https://arcusonline-cursor.vercel.app";
+  return "http://localhost:3000";
 }
 
 /**
@@ -224,10 +237,20 @@ export async function forgotPassword(
 
     const supabase = await createServerClient();
 
+    // CRITICAL: Use absolute production URL for password reset
+    // Supabase validates redirectTo against Site URL, so it must match
+    const appUrl = getAppUrl();
+    const resetUrl = `${appUrl}/auth/reset-password`;
+    
+    // Log for debugging (remove in production)
+    if (process.env.NODE_ENV === "development") {
+      console.log(`[Password Reset] Using redirect URL: ${resetUrl}`);
+    }
+
     const { error } = await supabase.auth.resetPasswordForEmail(
       validated.data.email,
       {
-        redirectTo: `${getAppUrl()}/auth/reset-password`,
+        redirectTo: resetUrl,
       }
     );
 

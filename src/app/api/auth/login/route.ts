@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
+import { createServerClient as createSupabaseServerClient } from "@supabase/ssr";
 import { loginSchema } from "@/lib/validation/auth";
+import type { Database } from "@/types/database";
 
 /**
  * Server-side login route handler
- * This ensures cookies are set properly before redirect
+ * This ensures cookies are set properly using Next.js cookies() API
  */
 export async function POST(request: Request) {
   try {
@@ -20,7 +22,44 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = await createServerClient();
+    const cookieStore = await cookies();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return NextResponse.json(
+        { error: "Server configuration error" },
+        { status: 500 }
+      );
+    }
+
+    // Create Supabase client - cookies will be set via setAll callback
+    const supabase = createSupabaseServerClient<Database>(supabaseUrl, supabaseAnonKey, {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          // CRITICAL: Set cookies with explicit attributes
+          // Next.js cookies() API automatically includes these in response headers
+          cookiesToSet.forEach(({ name, value, options }) => {
+            try {
+              cookieStore.set(name, value, {
+                ...options,
+                httpOnly: options?.httpOnly ?? true,
+                sameSite: (options?.sameSite as "lax" | "strict" | "none") ?? "lax",
+                secure: options?.secure ?? (process.env.NODE_ENV === "production"),
+                path: options?.path ?? "/",
+                maxAge: options?.maxAge ?? 60 * 60 * 24 * 7, // 7 days default
+              });
+            } catch (error) {
+              // Cookies are set via Next.js response - this is expected in some contexts
+              console.warn(`Cookie set warning for ${name}:`, error);
+            }
+          });
+        },
+      },
+    });
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email: validated.data.email,
@@ -38,12 +77,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // Ensure session is persisted in cookies
-    // The SSR client automatically sets cookies via setAll callback
-    await supabase.auth.getSession();
+    // CRITICAL: Force session refresh to trigger cookie setting
+    // This ensures the setAll callback is called with session cookies
+    const { data: { session: refreshedSession }, error: sessionError } = await supabase.auth.getSession();
 
-    // Return success - cookies are already set by the SSR client
-    // The client will handle the redirect
+    if (sessionError || !refreshedSession) {
+      console.error("Session refresh error:", sessionError);
+      return NextResponse.json(
+        { error: "Failed to persist session" },
+        { status: 500 }
+      );
+    }
+
+    // Return success - cookies are automatically included in response via Next.js cookies() API
     return NextResponse.json({ 
       success: true, 
       redirectTo 

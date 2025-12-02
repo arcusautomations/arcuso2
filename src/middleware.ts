@@ -21,35 +21,40 @@ export async function middleware(request: NextRequest) {
   try {
     const { session, response } = await createMiddlewareClient(request);
 
+    // Debug logging (remove in production if needed)
+    if (process.env.NODE_ENV === "development") {
+      console.log(`[Middleware] ${pathname} - Session: ${session ? "exists" : "none"}`);
+    }
+
     // Redirect authenticated users away from auth pages
     if (isAuthRoute(pathname) && session) {
-      // Prevent redirect loops - if we're already on the destination, don't redirect
       const redirectParam = request.nextUrl.searchParams.get("redirect");
       const destination = redirectParam && redirectParam.startsWith("/") 
         ? redirectParam 
         : "/dashboard";
       
-      // If already on destination, don't redirect
-      if (pathname === destination || pathname === "/dashboard") {
-        return response;
+      // Don't redirect if we're already going to the destination
+      if (pathname !== destination && pathname !== "/dashboard") {
+        const dashboardUrl = new URL(destination, request.url);
+        dashboardUrl.searchParams.delete("redirect");
+        if (process.env.NODE_ENV === "development") {
+          console.log(`[Middleware] Redirecting authenticated user from ${pathname} to ${destination}`);
+        }
+        return NextResponse.redirect(dashboardUrl);
       }
-      
-      const dashboardUrl = new URL(destination, request.url);
-      // Clear the redirect param from URL
-      dashboardUrl.searchParams.delete("redirect");
-      return NextResponse.redirect(dashboardUrl);
     }
 
     // Redirect unauthenticated users away from protected pages
     if (isProtectedRoute(pathname) && !session) {
-      // Prevent redirect loops - don't redirect if already on login
-      if (pathname === "/login") {
-        return response;
+      // Only redirect if not already on login page
+      if (pathname !== "/login") {
+        const loginUrl = new URL("/login", request.url);
+        loginUrl.searchParams.set("redirect", pathname);
+        if (process.env.NODE_ENV === "development") {
+          console.log(`[Middleware] Redirecting unauthenticated user from ${pathname} to /login`);
+        }
+        return NextResponse.redirect(loginUrl);
       }
-      
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("redirect", pathname);
-      return NextResponse.redirect(loginUrl);
     }
 
     return response;

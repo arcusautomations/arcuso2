@@ -63,6 +63,7 @@ function LoginForm() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // CRITICAL: Include cookies in request/response
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
@@ -88,12 +89,17 @@ function LoginForm() {
         description: "You have been signed in successfully.",
       });
 
-      // Small delay to ensure toast is visible and cookies are persisted
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // CRITICAL: Wait for cookies to be set in browser
+      // The fetch response includes Set-Cookie headers, but browser needs time to process them
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // Use window.location.replace for a hard redirect
-      // This ensures a full page reload so middleware can read the cookies
-      window.location.replace(result.redirectTo || redirect);
+      // Verify we can access the redirect destination
+      const destination = result.redirectTo || redirect;
+      
+      // Use window.location.href for a full page navigation
+      // This triggers a complete page reload, ensuring middleware runs
+      // and can read the cookies that were set in the previous request
+      window.location.href = destination;
     } catch (err) {
       console.error("Login error:", err);
       setError("An unexpected error occurred. Please try again.");

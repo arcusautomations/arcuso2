@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Lock, Eye, EyeOff, Check } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -9,13 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { resetPassword } from "@/lib/auth";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import {
   resetPasswordSchema,
   type ResetPasswordFormData,
 } from "@/lib/validation/auth";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [formData, setFormData] = useState<ResetPasswordFormData>({
     password: "",
@@ -27,6 +29,75 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [success, setSuccess] = useState(false);
+  const [isVerifyingToken, setIsVerifyingToken] = useState(true);
+
+  // Handle password reset token from URL hash (Supabase OAuth-style redirect)
+  useEffect(() => {
+    const handleTokenVerification = async () => {
+      try {
+        // Check for token in URL hash (Supabase redirects with #access_token=...)
+        const hash = window.location.hash;
+        if (hash) {
+          const params = new URLSearchParams(hash.substring(1)); // Remove #
+          const accessToken = params.get("access_token");
+          const type = params.get("type");
+          
+          if (accessToken && type === "recovery") {
+            // Exchange the token for a session
+            const supabase = getSupabaseBrowserClient();
+            const { data, error } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: params.get("refresh_token") || "",
+            });
+
+            if (error) {
+              setError(`Token verification failed: ${error.message}`);
+              setIsVerifyingToken(false);
+              return;
+            }
+
+            if (data.session) {
+              // Token is valid, user can now reset password
+              setIsVerifyingToken(false);
+              // Clear the hash from URL
+              window.history.replaceState(null, "", window.location.pathname);
+              return;
+            }
+          }
+        }
+
+        // Check for token in query params (alternative format)
+        const token = searchParams.get("token");
+        const type = searchParams.get("type");
+        
+        if (token && type === "recovery") {
+          // This is the old format - we need to exchange it
+          const supabase = getSupabaseBrowserClient();
+          // For token-based reset, we'll handle it in the form submission
+          setIsVerifyingToken(false);
+          return;
+        }
+
+        // No token found - check if user has an active session
+        const supabase = getSupabaseBrowserClient();
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+          setError("Invalid or expired reset link. Please request a new password reset.");
+          setIsVerifyingToken(false);
+          return;
+        }
+
+        setIsVerifyingToken(false);
+      } catch (err) {
+        console.error("Token verification error:", err);
+        setError("Failed to verify reset token. Please request a new password reset.");
+        setIsVerifyingToken(false);
+      }
+    };
+
+    handleTokenVerification();
+  }, [searchParams]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,6 +129,16 @@ export default function ResetPasswordPage() {
     }
 
     try {
+      // First, ensure we have a valid session (from token verification)
+      const supabase = getSupabaseBrowserClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        setError("Your reset link has expired. Please request a new password reset.");
+        setIsLoading(false);
+        return;
+      }
+
       const result = await resetPassword(formData);
 
       if (!result.success) {
@@ -65,6 +146,9 @@ export default function ResetPasswordPage() {
         setIsLoading(false);
         return;
       }
+
+      // Sign out after password reset (security best practice)
+      await supabase.auth.signOut();
 
       setSuccess(true);
       toast.success("Password reset successfully!", {
@@ -76,6 +160,7 @@ export default function ResetPasswordPage() {
         router.push("/login?message=password-reset-success");
       }, 2000);
     } catch (err) {
+      console.error("Reset password error:", err);
       setError("An unexpected error occurred. Please try again.");
       setIsLoading(false);
     }
@@ -93,6 +178,18 @@ export default function ResetPasswordPage() {
   };
 
   const passwordStrength = getPasswordStrength(formData.password);
+
+  // Show loading state while verifying token
+  if (isVerifyingToken) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-8 bg-slate-50 dark:bg-slate-950">
+        <div className="w-full max-w-md space-y-6 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600 mx-auto"></div>
+          <p className="text-slate-600 dark:text-slate-400">Verifying reset link...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (success) {
     return (
@@ -246,4 +343,18 @@ export default function ResetPasswordPage() {
   );
 }
 
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center p-8 bg-slate-50 dark:bg-slate-950">
+        <div className="w-full max-w-md space-y-6 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600 mx-auto"></div>
+          <p className="text-slate-600 dark:text-slate-400">Loading...</p>
+        </div>
+      </div>
+    }>
+      <ResetPasswordForm />
+    </Suspense>
+  );
+}
 
