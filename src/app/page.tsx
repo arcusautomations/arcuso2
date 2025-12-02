@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, Sparkles, Shield, Zap, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Hero } from "@/components/ui/animated-hero";
 
 export default function HomePage() {
   const router = useRouter();
@@ -85,65 +86,14 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32">
+      <section className="relative pt-24 pb-20 lg:pt-32 lg:pb-32">
         {/* Background decoration */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute -top-1/2 left-1/2 -translate-x-1/2 h-[800px] w-[800px] rounded-full bg-gradient-to-r from-violet-400/30 to-indigo-400/30 blur-3xl" />
           <div className="absolute top-1/4 right-0 h-[400px] w-[400px] rounded-full bg-gradient-to-r from-indigo-400/20 to-purple-400/20 blur-3xl" />
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-1.5 text-sm font-medium text-violet-700 dark:border-violet-800 dark:bg-violet-900/50 dark:text-violet-300 mb-8 animate-fade-in">
-              <Sparkles className="h-4 w-4" />
-              <span>Powered by Advanced AI</span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl lg:text-7xl animate-slide-up">
-              Transform Your Business
-              <br />
-              <span className="text-gradient">With AI & Automation</span>
-            </h1>
-
-            {/* Subheadline */}
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-400 animate-slide-up" style={{ animationDelay: "100ms" }}>
-              Master the latest AI technologies with hands-on training and real-world projects. Stay ahead with cutting-edge AI tools and techniques designed for 2026.
-            </p>
-
-            {/* CTAs */}
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: "200ms" }}>
-              <Button asChild size="xl">
-                <Link href="/signup">
-                  Start Learning Free
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="xl">
-                <Link href="/login">View Demo</Link>
-              </Button>
-            </div>
-
-            {/* Social proof */}
-            <div className="mt-12 flex flex-col items-center gap-4 animate-slide-up" style={{ animationDelay: "300ms" }}>
-              <div className="flex -space-x-2">
-                {[...Array(5)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-10 w-10 rounded-full border-2 border-white bg-gradient-to-br from-violet-400 to-indigo-500 dark:border-slate-900"
-                  />
-                ))}
-              </div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                <span className="font-semibold text-slate-900 dark:text-white">
-                  2,500+
-                </span>{" "}
-                professionals already learning
-              </p>
-            </div>
-          </div>
-        </div>
+        <Hero />
       </section>
 
       {/* Features Section */}

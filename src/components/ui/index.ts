@@ -54,4 +54,5 @@ export {
   TooltipContent,
   TooltipProvider,
 } from "./tooltip";
+export { Hero } from "./animated-hero";
 
