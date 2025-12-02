@@ -109,9 +109,7 @@ export default function HomePage() {
 
             {/* Subheadline */}
             <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-400 animate-slide-up" style={{ animationDelay: "100ms" }}>
-              Access premium training courses, comprehensive guides, and
-              cutting-edge tools designed to help you master AI and automation
-              technologies.
+              Master the latest AI technologies with hands-on training and real-world projects. Stay ahead with cutting-edge AI tools and techniques designed for 2026.
             </p>
 
             {/* CTAs */}
@@ -166,28 +164,28 @@ export default function HomePage() {
                 icon: Sparkles,
                 title: "AI Courses",
                 description:
-                  "Master the latest AI technologies with hands-on training and real-world projects.",
+                  "Master the latest AI technologies with hands-on training and real-world projects. Stay ahead with cutting-edge AI tools and techniques designed for 2026.",
                 color: "from-violet-500 to-indigo-500",
               },
               {
                 icon: Zap,
                 title: "Automation Tools",
                 description:
-                  "Access pre-built automation templates and custom tools to streamline your workflow.",
+                  "Access pre-built automation templates and custom tools to streamline your workflow. Reduce manual tasks by up to 80% with intelligent automation.",
                 color: "from-amber-500 to-orange-500",
               },
               {
                 icon: Shield,
                 title: "Best Practices",
                 description:
-                  "Learn industry-standard security and implementation best practices.",
+                  "Learn industry-standard security and implementation best practices. Build AI solutions that are secure, scalable, and compliant.",
                 color: "from-emerald-500 to-teal-500",
               },
               {
                 icon: Users,
                 title: "Community",
                 description:
-                  "Join a thriving community of professionals sharing knowledge and experiences.",
+                  "Join a thriving community of professionals sharing knowledge and experiences. Get support from experts and peers on your automation journey.",
                 color: "from-pink-500 to-rose-500",
               },
             ].map((feature, index) => (
