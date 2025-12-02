@@ -85,24 +85,22 @@ function LoginForm() {
         return;
       }
 
-      // CRITICAL: Wait for cookies to be set in browser
-      // The fetch response includes Set-Cookie headers, but browser needs time to process them
-      // Also verify the session was created successfully
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
       toast.success("Welcome back!", {
         description: "You have been signed in successfully.",
       });
 
-      // Additional small delay to ensure toast is visible
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // CRITICAL: Wait for cookies to be set in browser
+      // The fetch response includes Set-Cookie headers, but browser needs time to process them
+      // We need to wait long enough for cookies to be available for the next request
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Verify we can access the redirect destination
       const destination = result.redirectTo || redirect;
       
-      // Use window.location.replace() for a hard redirect that doesn't add to history
-      // This ensures a clean navigation and that cookies are sent with the request
-      window.location.replace(destination);
+      // Use window.location.href for a full page navigation
+      // This ensures cookies are sent with the request and middleware can read them
+      // Using href instead of replace to ensure proper cookie handling
+      window.location.href = destination;
     } catch (err) {
       console.error("Login error:", err);
       setError("An unexpected error occurred. Please try again.");

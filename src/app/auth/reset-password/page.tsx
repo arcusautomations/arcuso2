@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { resetPassword } from "@/lib/auth";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import {
   resetPasswordSchema,
@@ -62,25 +61,37 @@ function ResetPasswordForm() {
           const accessToken = params.get("access_token");
           
           if (accessToken && type === "recovery") {
-            // Exchange the token for a session
-            const supabase = getSupabaseBrowserClient();
-            const { data, error: sessionError } = await supabase.auth.setSession({
-              access_token: accessToken,
-              refresh_token: params.get("refresh_token") || "",
-            });
+            // Exchange the token for a session via API route (sets HTTP-only cookies)
+            try {
+              const response = await fetch("/api/auth/reset-password/session", {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                  access_token: accessToken,
+                  refresh_token: params.get("refresh_token") || "",
+                }),
+              });
 
-            if (sessionError) {
-              setError(`Token verification failed: ${sessionError.message}. Please request a new password reset.`);
+              const result = await response.json();
+
+              if (!response.ok || !result.success) {
+                setError(result.error || "Token verification failed. Please request a new password reset.");
+                setIsVerifyingToken(false);
+                window.history.replaceState(null, "", window.location.pathname);
+                return;
+              }
+
+              // Token is valid, session is now in cookies, user can reset password
               setIsVerifyingToken(false);
-              // Clear the hash from URL
               window.history.replaceState(null, "", window.location.pathname);
               return;
-            }
-
-            if (data.session) {
-              // Token is valid, user can now reset password
+            } catch (err) {
+              console.error("Token exchange error:", err);
+              setError("Failed to verify reset token. Please request a new password reset.");
               setIsVerifyingToken(false);
-              // Clear the hash from URL
               window.history.replaceState(null, "", window.location.pathname);
               return;
             }
@@ -107,16 +118,25 @@ function ResetPasswordForm() {
           return;
         }
 
-        // No token found - check if user has an active session
-        const supabase = getSupabaseBrowserClient();
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (!session) {
-          setError("Invalid or expired reset link. Please request a new password reset.");
-          setIsVerifyingToken(false);
-          return;
+        // No token found in hash - check if we have a session in cookies
+        // This could happen if the user refreshed the page after token was processed
+        try {
+          const response = await fetch("/api/auth/reset-password/check", {
+            method: "GET",
+            credentials: "include",
+          });
+
+          if (response.ok) {
+            // Session exists in cookies, allow password reset
+            setIsVerifyingToken(false);
+            return;
+          }
+        } catch (err) {
+          // Ignore check errors
         }
 
+        // No valid session found
+        setError("Invalid or expired reset link. Please request a new password reset.");
         setIsVerifyingToken(false);
       } catch (err) {
         console.error("Token verification error:", err);
@@ -158,26 +178,23 @@ function ResetPasswordForm() {
     }
 
     try {
-      // First, ensure we have a valid session (from token verification)
-      const supabase = getSupabaseBrowserClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        setError("Your reset link has expired. Please request a new password reset.");
-        setIsLoading(false);
-        return;
-      }
+      // Call API route to reset password (uses server-side session from cookies)
+      const response = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(formData),
+      });
 
-      const result = await resetPassword(formData);
+      const result = await response.json();
 
-      if (!result.success) {
+      if (!response.ok || !result.success) {
         setError(result.error ?? "Failed to reset password");
         setIsLoading(false);
         return;
       }
-
-      // Sign out after password reset (security best practice)
-      await supabase.auth.signOut();
 
       setSuccess(true);
       toast.success("Password reset successfully!", {
