@@ -42,10 +42,16 @@ export async function createMiddlewareClient(request: NextRequest) {
     },
   });
 
-  // Refresh session if expired
+  // Refresh session - this ensures cookies are properly read and updated
   const {
     data: { session },
+    error: sessionError,
   } = await supabase.auth.getSession();
+
+  // If there's a session error, log it but don't fail
+  if (sessionError) {
+    console.error("Middleware session error:", sessionError);
+  }
 
   return { supabase, response, session };
 }
@@ -58,6 +64,9 @@ export const protectedRoutes = [
   "/profile",
   "/settings",
   "/courses",
+  "/guides",
+  "/tools",
+  "/projects",
   "/resources",
 ];
 

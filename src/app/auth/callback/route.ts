@@ -1,5 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 /**
  * Auth callback handler for email verification and OAuth flows
@@ -13,11 +14,16 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = await createServerClient();
     
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     
-    if (!error) {
+    if (!error && data.session) {
+      // Ensure session is persisted
+      await supabase.auth.getSession();
+      revalidatePath("/", "layout");
+      
       // Successful verification - redirect to the next page or dashboard
-      return NextResponse.redirect(new URL(next, requestUrl.origin));
+      const redirectUrl = new URL(next, requestUrl.origin);
+      return NextResponse.redirect(redirectUrl);
     }
   }
 

@@ -23,7 +23,14 @@ export async function middleware(request: NextRequest) {
 
     // Redirect authenticated users away from auth pages
     if (isAuthRoute(pathname) && session) {
-      const dashboardUrl = new URL("/dashboard", request.url);
+      // Check if there's a redirect param and use it, otherwise go to dashboard
+      const redirectParam = request.nextUrl.searchParams.get("redirect");
+      const destination = redirectParam && redirectParam.startsWith("/") 
+        ? redirectParam 
+        : "/dashboard";
+      const dashboardUrl = new URL(destination, request.url);
+      // Clear the redirect param from URL
+      dashboardUrl.searchParams.delete("redirect");
       return NextResponse.redirect(dashboardUrl);
     }
 

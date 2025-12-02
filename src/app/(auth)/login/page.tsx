@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,13 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { signIn } from "@/lib/auth";
 import { loginSchema, type LoginFormData } from "@/lib/validation/auth";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? "/dashboard";
   const message = searchParams.get("message");
+  const urlError = searchParams.get("error");
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -24,7 +25,7 @@ function LoginForm() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(urlError);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,10 +59,32 @@ function LoginForm() {
     }
 
     try {
-      const result = await signIn(formData);
+      // Use client-side Supabase client for immediate cookie setting
+      // This ensures cookies are set in the browser before redirect
+      const supabase = getSupabaseBrowserClient();
+      
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
 
-      if (!result.success) {
-        setError(result.error ?? "Failed to sign in");
+      if (signInError) {
+        setError(signInError.message);
+        setIsLoading(false);
+        return;
+      }
+
+      if (!data.session) {
+        setError("Failed to create session. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Verify session is set before redirecting
+      const { data: { session: verifySession } } = await supabase.auth.getSession();
+      
+      if (!verifySession) {
+        setError("Session not created. Please try again.");
         setIsLoading(false);
         return;
       }
@@ -70,12 +93,14 @@ function LoginForm() {
         description: "You have been signed in successfully.",
       });
 
-      // Use window.location for a full page reload to ensure cookies are read
-      // This ensures the middleware can properly detect the authenticated session
-      setTimeout(() => {
-        window.location.href = redirect;
-      }, 100);
+      // Small delay to ensure toast is visible and cookies are fully persisted
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Use window.location.href for a hard redirect with full page reload
+      // This ensures cookies are read by middleware on the next request
+      window.location.href = redirect;
     } catch (err) {
+      console.error("Login error:", err);
       setError("An unexpected error occurred. Please try again.");
       setIsLoading(false);
     }

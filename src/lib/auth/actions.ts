@@ -18,6 +18,7 @@ import type { ApiResponse } from "@/types";
 
 /**
  * Sign in with email and password
+ * This version returns a response for client-side handling
  */
 export async function signIn(
   formData: LoginFormData
@@ -50,7 +51,9 @@ export async function signIn(
 
     // Ensure session is properly set in cookies
     if (data.session) {
-      // The SSR client automatically handles cookie setting
+      // The SSR client automatically handles cookie setting via setAll
+      // Force a refresh to ensure cookies are persisted
+      await supabase.auth.getSession();
       revalidatePath("/", "layout");
       
       return {
@@ -73,6 +76,43 @@ export async function signIn(
       success: false,
     };
   }
+}
+
+/**
+ * Sign in with email and password - Server-side redirect version
+ * Use this in form actions for automatic redirect
+ */
+export async function signInWithRedirect(
+  formData: LoginFormData,
+  redirectTo: string = "/dashboard"
+): Promise<never> {
+  // Validate input
+  const validated = loginSchema.safeParse(formData);
+  if (!validated.success) {
+    redirect(`/login?error=${encodeURIComponent(validated.error.errors[0]?.message ?? "Invalid input")}`);
+  }
+
+  const supabase = await createServerClient();
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: validated.data.email,
+    password: validated.data.password,
+  });
+
+  if (error) {
+    redirect(`/login?error=${encodeURIComponent(error.message)}`);
+  }
+
+  if (!data.session) {
+    redirect("/login?error=Failed to create session");
+  }
+
+  // Ensure session is persisted
+  await supabase.auth.getSession();
+  revalidatePath("/", "layout");
+  
+  // Redirect after successful login
+  redirect(redirectTo);
 }
 
 /**

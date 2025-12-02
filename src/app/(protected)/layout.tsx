@@ -10,6 +10,7 @@ export default async function ProtectedLayout({
   const user = await getCurrentUser();
 
   if (!user) {
+    // Middleware should have already redirected, but this is a safety check
     redirect("/login");
   }
 
