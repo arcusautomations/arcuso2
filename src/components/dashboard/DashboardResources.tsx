@@ -112,7 +112,7 @@ export function DashboardResources() {
           />
           <ResourceCard
             title="Get Started On Zoho"
-            description="Access free trials for Zoho One or Zoho CRM to streamline your business operations and customer relationships."
+            description="Access trials for Zoho One or Zoho CRM with Arcus Automations as your Zoho Consulting Partner. Streamline your business operations and customer relationships."
             icon={Zap}
             badge="Free Trial"
             href="/zoho-signup"

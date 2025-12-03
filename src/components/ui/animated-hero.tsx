@@ -10,16 +10,16 @@ export function Hero() {
   const [titleNumber, setTitleNumber] = useState(0);
 
   const titles = useMemo(
-    () => ["intelligent", "automated", "efficient", "scalable", "powerful"],
+    () => ["automation", "agentic AI", "efficiency", "knowledge", "real solutions"],
     []
   );
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (titleNumber === titles.length - 1) {
+      if (titleNumber === titles.length - 2) {
         setTitleNumber(0);
       } else {
-        setTitleNumber(titleNumber + 1);
+        setTitleNumber(titleNumber + 2);
       }
     }, 2000);
     return () => clearTimeout(timeoutId);
@@ -34,7 +34,7 @@ export function Hero() {
             <Button variant="secondary" size="sm" className="gap-2" asChild>
               <Link href="/about">
                 <Sparkles className="w-4 h-4" />
-                Powered by Advanced AI
+                Powered by Arcus Automations
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>
@@ -43,7 +43,7 @@ export function Hero() {
           {/* Animated Title */}
           <div className="flex gap-4 flex-col">
             <h1 className="text-5xl md:text-7xl max-w-4xl tracking-tighter text-center font-bold text-slate-900 dark:text-white">
-              <span className="block">Transform Your Business</span>
+              <span className="block">Grow Your Business</span>
               <span className="block">With</span>
               <span className="relative flex w-full justify-center overflow-hidden text-center md:pb-4 md:pt-1 h-[1.2em]">
                 {titles.map((title, index) => (
@@ -68,12 +68,12 @@ export function Hero() {
                   </motion.span>
                 ))}
               </span>
-              <span className="block">AI & Automation</span>
+              <span className="block">Arcus Online</span>
             </h1>
             <p className="text-lg md:text-xl leading-relaxed tracking-tight text-slate-600 dark:text-slate-400 max-w-2xl text-center mt-4">
-              Master the latest AI technologies with hands-on training and real-world projects. 
+              Master the latest AI tech with access to our online platform and real-world use cases. 
               Stay ahead with cutting-edge AI tools and techniques designed for 2026. 
-              Reduce manual tasks by up to 80% and scale your business efficiently.
+              Learn from experts that have built real solutions for businesses like yours.
             </p>
           </div>
 
@@ -105,7 +105,7 @@ export function Hero() {
             </div>
             <p className="text-sm text-slate-600 dark:text-slate-400">
               <span className="font-semibold text-slate-900 dark:text-white">
-                2,500+
+                Over 340
               </span>{" "}
               professionals already learning
             </p>

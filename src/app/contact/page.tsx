@@ -44,7 +44,7 @@ export default function ContactPage() {
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
-      toast.success("Consultation request submitted!", {
+      toast.success("Consultation request submitted.", {
         description: "We'll contact you within 24 hours to schedule your consultation.",
       });
     }, 1000);
@@ -79,7 +79,7 @@ export default function ContactPage() {
                   Thank You!
                 </h2>
                 <p className="text-slate-600 dark:text-slate-400 mb-8">
-                  We&apos;ve received your consultation request. Our team will contact you within 24 hours to schedule your free consultation.
+                  We&apos;ve received your consultation request. Our team will contact you within 24 hours to schedule you in.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button asChild>
@@ -134,7 +134,7 @@ export default function ContactPage() {
               Let&apos;s Talk About Your Business
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
-              Schedule a free consultation to discuss how AI and automation can transform your operations
+              Schedule your obligation-free consultation to discuss what we can do for you, your current challenges or what you want to achieve.
             </p>
           </div>
 
@@ -144,10 +144,10 @@ export default function ContactPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-violet-600" />
-                  Book Your Free Consultation
+                  Book Your Free Call
                 </CardTitle>
                 <CardDescription>
-                  Choose a time that works for you. Our team will discuss your business needs and show you how automation can help.
+                  Choose a time that works for you. Our team will discuss your needs. If a solution can be provided, you will be given a scope of work for review.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -207,11 +207,13 @@ export default function ContactPage() {
                       className="flex h-11 w-full rounded-lg border-2 border-slate-200 bg-white px-4 py-2 text-sm text-slate-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:border-violet-500 focus:ring-violet-500/20 dark:bg-slate-900 dark:text-slate-100 dark:border-slate-700"
                     >
                       <option value="">Select a topic</option>
+                      <option value="on-call-developer">On-Call Developer</option>
                       <option value="automation-strategy">Automation Strategy</option>
                       <option value="ai-implementation">AI Implementation</option>
                       <option value="process-optimization">Process Optimization</option>
                       <option value="custom-solutions">Custom Solutions</option>
                       <option value="training">Training & Onboarding</option>
+                      <option value="joint-venture">Joint Venture</option>
                       <option value="other">Other</option>
                     </select>
                   </div>
@@ -263,7 +265,7 @@ export default function ContactPage() {
                 <CardHeader>
                   <CardTitle>Direct Contact</CardTitle>
                   <CardDescription>
-                    Prefer to reach out directly? We&apos;re here to help.
+                    Only Arcus Automations clients receive direct support. Email us if you have any questions.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -277,7 +279,7 @@ export default function ContactPage() {
                       >
                         admin@arcusautomations.com
                       </a>
-                      <p className="text-xs text-slate-500 mt-1">Response within 24 hours</p>
+                      <p className="text-xs text-slate-500 mt-1">Response within 48 hours</p>
                     </div>
                   </div>
                 </CardContent>
@@ -305,9 +307,9 @@ export default function ContactPage() {
                         <span className="text-violet-600 dark:text-violet-400 text-sm font-bold">2</span>
                       </div>
                       <div>
-                        <p className="font-medium text-slate-900 dark:text-white">Custom Proposal</p>
+                        <p className="font-medium text-slate-900 dark:text-white">Scope of Work</p>
                         <p className="text-sm text-slate-600 dark:text-slate-400">
-                          We&apos;ll create a tailored solution for your needs
+                          We&apos;ll create a scope of work tailored to your needs
                         </p>
                       </div>
                     </li>
@@ -327,9 +329,9 @@ export default function ContactPage() {
                         <span className="text-violet-600 dark:text-violet-400 text-sm font-bold">4</span>
                       </div>
                       <div>
-                        <p className="font-medium text-slate-900 dark:text-white">Ongoing Support</p>
+                        <p className="font-medium text-slate-900 dark:text-white">Ongoing Support, Maintenance & Enhancement</p>
                         <p className="text-sm text-slate-600 dark:text-slate-400">
-                          We&apos;ll ensure your success with continuous support
+                          We&apos;ll ensure your success with continuous support on one of our ongoing support plans.
                         </p>
                       </div>
                     </li>

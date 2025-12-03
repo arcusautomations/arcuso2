@@ -12,16 +12,16 @@ import { Badge } from "@/components/ui/badge";
 
 const pricingPlans = [
   {
-    name: "Free",
-    price: "Free Forever",
+    name: "Free User",
+    price: "Free",
     description: "Perfect for getting started with AI and automation",
     features: [
       "Access to free courses and guides",
       "Free website optimization audit",
-      "Community support",
-      "Free tool access",
-      "Zoho platform free trials",
-      "Basic automation templates",
+      "Email support",
+      "Basic tool access",
+      "Zoho platform free trials and a call with a Zoho Consulting Partner",
+      "Basic automation templates and AI prompt libraries",
     ],
     cta: "Get Started Free",
     href: "/signup",
@@ -33,36 +33,32 @@ const pricingPlans = [
     period: "/month",
     annualPrice: "$990",
     annualPeriod: "/year",
-    description: "For professionals and growing businesses",
+    description: "For professionals and growing businesses looking to implement AI and automation solutions",
     features: [
       "Everything in Free",
       "Premium course access (all courses)",
-      "Priority support (24-hour response)",
+      "Priority support (generally 24-hour response)",
       "Advanced tools and templates",
       "Monthly consultation calls (1 hour)",
-      "Custom automation templates",
-      "Certificate of completion",
-      "Early access to new features",
+      "Custom automation templates and AI prompt libraries",
+      "Early access to new features and resources",
     ],
-    cta: "Start Free Trial",
+    cta: "Start Professional Plan",
     href: "/signup?plan=professional",
     popular: true,
     savings: "Save 17% with annual billing",
   },
   {
-    name: "Enterprise",
-    price: "Custom",
-    description: "For organizations needing comprehensive solutions",
+    name: "Premium",
+    price: "$299",
+    description: "For organizations needing comprehensive solutions and dedicated support",
     features: [
       "Everything in Professional",
-      "Custom AI implementation",
-      "Dedicated account manager",
-      "Unlimited consultations",
-      "Custom integrations",
-      "SLA guarantees (99.9% uptime)",
-      "Training for your team",
-      "White-glove onboarding",
-      "Custom development",
+      "Custom AI and automation implementation guides and templates",
+      "Dedicated account manager and access to our team",
+      "Weekly consultation calls (1 hour)",
+      "Custom integration recommendations",
+      "Monthly training material and updates for your team",
       "Priority feature requests",
     ],
     cta: "Contact Sales",
@@ -109,7 +105,7 @@ export default function PricingPage() {
               Simple, Transparent Pricing
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
-              Choose the plan that fits your business needs
+              Choose the plan that fits your needs
             </p>
           </div>
 
@@ -218,7 +214,7 @@ export default function PricingPage() {
                   Do you offer refunds?
                 </h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Yes, we offer a 30-day money-back guarantee on all paid plans. If you&apos;re not satisfied with your purchase, contact us within 30 days for a full refund.
+                  No we do not, however if you&apos;re not satisfied with your purchase, contact us and we will work with you to find a solution.
                 </p>
               </div>
               <div>
@@ -226,7 +222,7 @@ export default function PricingPage() {
                   Is there a free trial?
                 </h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Yes, all paid plans include a 14-day free trial. No credit card required to start your trial. You can cancel anytime during the trial period.
+                  No, we offer a free user tier with access to our basic resources, guides and tools.
                 </p>
               </div>
               <div>
@@ -234,7 +230,7 @@ export default function PricingPage() {
                   What payment methods do you accept?
                 </h3>
                 <p className="text-sm text-slate-600 dark:text-slate-400">
-                  We accept all major credit cards (Visa, Mastercard, American Express) and can invoice for enterprise plans. All payments are processed securely through Stripe.
+                  We accept all major credit cards (Visa, Mastercard, American Express) via Stripe and can invoice for Professional and Premium plans.All credit cardpayments are processed securely through Stripe.
                 </p>
               </div>
             </CardContent>
@@ -245,13 +241,13 @@ export default function PricingPage() {
             <CardHeader>
               <CardTitle className="text-white text-2xl">Ready to Get Started?</CardTitle>
               <CardDescription className="text-violet-100">
-                Join thousands of professionals transforming their businesses with AI and automation.
+                Join thousands of professionals growing their businesses with AI and automation.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="bg-white text-violet-600 hover:bg-violet-50">
-                  <Link href="/signup">Start Free Trial</Link>
+                  <Link href="/signup">Start Free User</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
                   <Link href="/contact">Contact Sales</Link>

@@ -47,7 +47,7 @@ export default function AboutPage() {
               About Arcus Automations
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
-              Empowering businesses to thrive in the age of AI and automation
+              Built by business owners who got sick of decyphering hype from actual value.
             </p>
           </div>
 
@@ -61,10 +61,10 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="space-y-4 text-slate-600 dark:text-slate-400">
               <p>
-                At Arcus Automations, we believe every business deserves access to enterprise-grade AI and automation tools. Founded with the vision of democratizing intelligent automation, we help businesses of all sizes transform their operations, reduce costs, and scale efficiently.
+               By 2025, everyone was talking about AI and automation but no one was actually doing anything. Most of it was, and still is, hype and marketing without actual value unless you spent the time to decypher it. We knew there had to be a better way. So Arcus Online was founded with the vision of providing a platform that is easy to use, affordable and provides real value to businesses without over-promising and under-delivering.
               </p>
               <p>
-                In 2026, AI isn&apos;t a luxury—it&apos;s a necessity. We&apos;re here to ensure your business doesn&apos;t just survive the digital transformation, but thrives in it.
+                In 2026, AI and automation isn't a luxury, it's a necessity. So is educating yourself and your team on how to really utilise it. We're here to ensure your business doesn't just survive digital transformation; it thrives in it.
               </p>
             </CardContent>
           </Card>
@@ -79,26 +79,26 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent>
               <p className="text-slate-600 dark:text-slate-400 mb-6">
-                We provide comprehensive AI and automation solutions that help businesses:
+                We provide comprehensive AI and automation solutions:
               </p>
               <ul className="space-y-3 text-slate-600 dark:text-slate-400">
                 <li className="flex items-start gap-3">
                   <div className="h-6 w-6 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-violet-600 dark:text-violet-400 text-sm font-bold">✓</span>
                   </div>
-                  <span><strong className="text-slate-900 dark:text-white">Automate repetitive tasks</strong> and free up your team for strategic work</span>
+                  <span><strong className="text-slate-900 dark:text-white">Automation solutions</strong> free up your team for strategic work</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <div className="h-6 w-6 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-violet-600 dark:text-violet-400 text-sm font-bold">✓</span>
                   </div>
-                  <span><strong className="text-slate-900 dark:text-white">Implement AI-powered tools</strong> that enhance decision-making and customer experience</span>
+                  <span><strong className="text-slate-900 dark:text-white">Implement AI-powered tools</strong> that enhance and speed up decision-making and customer experience</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <div className="h-6 w-6 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-violet-600 dark:text-violet-400 text-sm font-bold">✓</span>
                   </div>
-                  <span><strong className="text-slate-900 dark:text-white">Scale operations</strong> without proportionally increasing costs</span>
+                  <span><strong className="text-slate-900 dark:text-white">Grow</strong> sustainably and efficiently</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <div className="h-6 w-6 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -108,7 +108,7 @@ export default function AboutPage() {
                 </li>
               </ul>
               <p className="mt-6 text-slate-600 dark:text-slate-400">
-                Our approach combines strategic consulting, hands-on implementation, and ongoing support to ensure your success.
+                Our approach combines strategic consulting, hands-on implementation and ongoing support to ensure your success.
               </p>
             </CardContent>
           </Card>
@@ -124,31 +124,31 @@ export default function AboutPage() {
             <CardContent>
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
-                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Proven Results</h3>
+                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Expert Knowledge</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Our clients see an average 40% increase in productivity
+                    We keep up to date with the latest in AI and technology to ensure you are getting the best possible solution for your business.
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Expert Team</h3>
+                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Dedicated Team</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Certified professionals with deep expertise in AI, automation, and business transformation
+                    We get obsessed with your success and will provide solutions that are tailored to your business.
                   </p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Comprehensive Solutions</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    From strategy to implementation to ongoing optimization
+                    From strategy, development, implementation to ongoing optimization, maintenance and support.
                   </p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Partnership Approach</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    We&apos;re not just vendors—we&apos;re your long-term technology partners
+                    We're leading the next generation of full-service tech-solution providers; not just vendors.
                   </p>
                 </div>
                 <div className="md:col-span-2">
-                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Future-Focused</h3>
+                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Future-Obsessed</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
                     We stay ahead of trends, ensuring your solutions are built for tomorrow
                   </p>
@@ -161,25 +161,25 @@ export default function AboutPage() {
           <div className="grid gap-6 md:grid-cols-4 mb-12">
             <Card className="text-center">
               <CardContent className="pt-6">
-                <div className="text-4xl font-bold text-violet-600 dark:text-violet-400 mb-2">40%</div>
+                <div className="text-4xl font-bold text-violet-600 dark:text-violet-400 mb-2">46%</div>
                 <p className="text-sm text-slate-600 dark:text-slate-400">Average productivity increase</p>
               </CardContent>
             </Card>
             <Card className="text-center">
               <CardContent className="pt-6">
-                <div className="text-4xl font-bold text-violet-600 dark:text-violet-400 mb-2">6-12</div>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Months ROI payback</p>
+                <div className="text-4xl font-bold text-violet-600 dark:text-violet-400 mb-2">5-12</div>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Average months for ROI payback</p>
               </CardContent>
             </Card>
             <Card className="text-center">
               <CardContent className="pt-6">
-                <div className="text-4xl font-bold text-violet-600 dark:text-violet-400 mb-2">2,500+</div>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Professionals trained</p>
+                <div className="text-4xl font-bold text-violet-600 dark:text-violet-400 mb-2">1,500+</div>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Businesses trained</p>
               </CardContent>
             </Card>
             <Card className="text-center">
               <CardContent className="pt-6">
-                <div className="text-4xl font-bold text-violet-600 dark:text-violet-400 mb-2">98%</div>
+                <div className="text-4xl font-bold text-violet-600 dark:text-violet-400 mb-2">98.5%</div>
                 <p className="text-sm text-slate-600 dark:text-slate-400">Client satisfaction</p>
               </CardContent>
             </Card>
@@ -188,9 +188,9 @@ export default function AboutPage() {
           {/* CTA */}
           <Card className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white border-0">
             <CardHeader>
-              <CardTitle className="text-white text-2xl">Ready to Transform Your Business?</CardTitle>
+              <CardTitle className="text-white text-2xl">What are you waiting for?</CardTitle>
               <CardDescription className="text-violet-100">
-                Join thousands of professionals who are already leveraging AI and automation to accelerate their careers.
+                Getting started is usually the hardest part. With us, it doesn't have to be.
               </CardDescription>
             </CardHeader>
             <CardContent>

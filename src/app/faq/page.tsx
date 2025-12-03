@@ -21,19 +21,19 @@ const faqCategories = [
     items: [
       {
         question: "What is Arcus Online?",
-        answer: "Arcus Online is a comprehensive platform providing AI and automation training, tools, and services to help businesses transform their operations. We offer courses, guides, tools, and professional services designed to help businesses of all sizes implement AI and automation solutions.",
+        answer: "Arcus Online is a comprehensive platform designed to provide AI, automation and technology training, tools and services to help businesses grow and transform their operations. We offer a range of courses, guides, tools and professional services designed to help businesses of all sizes implement AI and automation solutions.",
       },
       {
         question: "Who is Arcus Online for?",
-        answer: "Arcus Online is designed for businesses of all sizes, from startups to enterprises, looking to implement AI and automation solutions. Whether you're a business owner, manager, developer, or professional looking to upskill, we have resources for you.",
+        answer: "Arcus Online is designed for businesses of all sizes; from startups to enterprises. Those looking to implement AI and automation solutions, but don't have time to decypher hype from actual value. Whether you're a business owner, manager, developer or professional looking to upskill; we'll have resources for you.",
       },
       {
         question: "Do I need technical knowledge to get started?",
-        answer: "No! Our courses and tools are designed for both technical and non-technical users. We start with the basics and guide you through advanced topics. Many of our resources are specifically designed for business users without technical backgrounds.",
+        answer: "No. Our founders are self-taught. Our courses and tools are designed for both non-technical and technical users. We start with basics and guide you through advanced use-cases. Most of our resources are specifically designed for business users without technical backgrounds.",
       },
       {
         question: "Is Arcus Online free?",
-        answer: "We offer a free tier with access to basic resources, guides, and tools. Premium courses and advanced features require a paid subscription. We also offer free trials for all paid plans.",
+        answer: "We offer a free tier with access to our basic resources, guides and tools. Premium courses and advanced features require a paid subscription or one-off purchase.",
       },
     ],
   },
@@ -42,19 +42,19 @@ const faqCategories = [
     items: [
       {
         question: "How long do I have access to courses?",
-        answer: "Once enrolled, you have lifetime access to course materials and updates. This means you can revisit the content anytime and stay updated with new material as we add it.",
+        answer: "Outside of our free tier, you have unlimited access to your purchased course materials and updates. This means you can revisit the content anytime and stay updated with new material as we add it.",
       },
       {
         question: "Are courses self-paced?",
-        answer: "Yes, all courses are self-paced with optional live support sessions. You can learn at your own speed and schedule, making it easy to fit learning into your busy schedule.",
+        answer: "Yes, all courses are self-paced. You can learn at your own speed and schedule. This makes it easy to fit learning into your busy schedule.",
       },
       {
         question: "Do you offer certificates?",
-        answer: "Yes, we provide certificates of completion for all premium courses. These certificates can be added to your LinkedIn profile and resume to showcase your skills.",
+        answer: "No we do not.",
       },
       {
         question: "What if I need help during a course?",
-        answer: "We offer multiple support channels including community forums, email support, and optional live Q&A sessions. Premium members also get priority support and direct access to instructors.",
+        answer: "This is a self-paced platform (and free), so naturally we do not offer support; unless you are a paid user and/or client of Arcus Automations. Paid users will be provided with complimentary support and access to our team.",
       },
     ],
   },
@@ -63,15 +63,15 @@ const faqCategories = [
     items: [
       {
         question: "What tools are included?",
-        answer: "Free members get access to basic tools and templates including automation templates, AI prompt libraries, and workflow builders. Premium members get advanced tools, custom templates, and priority support.",
+        answer: "Free users get access to our basic tools and templates, which may include automation templates, AI prompt libraries and workflow builders. Paid users get real-world, relevant tools, custom templates, complimentary support and access to our team.",
       },
       {
         question: "Can I use these tools for my business?",
-        answer: "Yes, all tools and templates are designed for commercial use. You can use them in your business operations, customize them for your needs, and integrate them into your workflows.",
+        answer: "Yes, all tools and templates are designed for your use. You can use them in your business, customize them for your needs, and integrate them into your workflows.",
       },
       {
         question: "Do you offer custom development?",
-        answer: "Yes, we offer custom AI and automation solutions for enterprise clients. Our team can build tailored solutions that integrate with your existing systems and meet your specific business requirements.",
+        answer: "Yes, we offer custom AI and automation solutions for businesses. Our team can build tailored solutions that integrate with your existing systems and meet your specific requirements.",
       },
       {
         question: "What services do you provide?",
@@ -84,19 +84,19 @@ const faqCategories = [
     items: [
       {
         question: "What payment methods do you accept?",
-        answer: "We accept all major credit cards (Visa, Mastercard, American Express). Enterprise clients can be invoiced and may have additional payment options available.",
+        answer: "We accept all major credit cards (Visa, Mastercard, American Express) via Stripe. Enterprise clients can be invoiced and may have additional payment options available.",
       },
       {
         question: "Can I cancel anytime?",
-        answer: "Yes, you can cancel your subscription at any time. You'll retain access to all premium features until the end of your current billing period. There are no cancellation fees or penalties.",
+        answer: "Yes, you can cancel your subscription at any time. You'll retain access to all paid features until the end of your current billing period. There are no cancellation fees or penalties.",
       },
       {
         question: "Is there a money-back guarantee?",
-        answer: "Yes, we offer a 30-day money-back guarantee on all paid plans. If you're not satisfied with your purchase, contact us within 30 days for a full refund.",
+        answer: "Yes, we offer a 30-day money-back guarantee on all paid plans. If you're not satisfied with your purchase just contact us within 30 days for a full refund.",
       },
       {
         question: "Do you offer discounts for annual plans?",
-        answer: "Yes, we offer significant discounts for annual subscriptions. Annual plans typically save you 20% compared to monthly billing. Enterprise plans may have additional discounts available.",
+        answer: "Yes, we offer discounts for annual subscriptions. Annual plans typically save you 17% compared to monthly billing. Professional and Premium plans may have additional discounts available on custom requests in their scope of work.",
       },
       {
         question: "What happens if I upgrade or downgrade my plan?",
@@ -109,15 +109,15 @@ const faqCategories = [
     items: [
       {
         question: "What kind of support do you offer?",
-        answer: "We offer email support for all users with a 24-hour response time. Premium members get priority support with faster response times. Enterprise clients have access to dedicated account managers and phone support.",
+        answer: "We offer email support for all users with a general 48-hour response time. Paid users get priority support with faster response times. Enterprise users or current Arcus Automations clients have access to dedicated account managers and direct phone support.",
       },
       {
         question: "Do you provide implementation support?",
-        answer: "Yes, our team provides hands-on implementation support for all our solutions. This includes setup assistance, integration help, and troubleshooting. Premium and enterprise plans include more comprehensive support.",
+        answer: "Yes, our team provides hands-on implementation support for all our solutions. This includes setup assistance, integration help and troubleshooting. Paid and Enterprise users and current Arcus Automations clients are provided with priorty support as already mentioned.",
       },
       {
         question: "Can you help integrate with my existing systems?",
-        answer: "Absolutely! We specialize in integrating AI and automation solutions with existing business systems. Our team can help with API integrations, data migrations, and system connections.",
+        answer: "Yes. We specialize in integrating all AI and automation solutions with existing business systems. Our team can help with API integrations, data migrations and system connections. We are a full-service provider.",
       },
     ],
   },
@@ -198,7 +198,7 @@ export default function FAQPage() {
             <CardHeader>
               <CardTitle className="text-white text-2xl">Still Have Questions?</CardTitle>
               <CardDescription className="text-violet-100">
-                Can&apos;t find the answer you&apos;re looking for? Our team is here to help.
+                Can&apos;t find the answer you&apos;re looking for? Contact us.
               </CardDescription>
             </CardHeader>
             <CardContent>

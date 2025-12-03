@@ -55,4 +55,6 @@ export {
   TooltipProvider,
 } from "./tooltip";
 export { Hero } from "./animated-hero";
+export { NavBar } from "./tubelight-navbar";
+export { default as AnimatedGlowingSearchBar } from "./animated-glowing-search-bar";
 
