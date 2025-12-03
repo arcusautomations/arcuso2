@@ -105,7 +105,7 @@ export function Hero() {
             </div>
             <p className="text-sm text-slate-600 dark:text-slate-400">
               <span className="font-semibold text-slate-900 dark:text-white">
-                Over 340
+                Over 1,500
               </span>{" "}
               professionals already learning
             </p>
