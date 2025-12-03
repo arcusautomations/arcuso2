@@ -16,10 +16,10 @@ export function Hero() {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (titleNumber === titles.length - 2) {
+      if (titleNumber === titles.length - 1) {
         setTitleNumber(0);
       } else {
-        setTitleNumber(titleNumber + 2);
+        setTitleNumber(titleNumber + 1);
       }
     }, 2000);
     return () => clearTimeout(timeoutId);
